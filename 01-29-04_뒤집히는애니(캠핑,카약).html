@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jquery-3.7.1.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+
+    <style type="text/css">
+        /* *{margin: 0;padding: 0;box-sizing: border-box;} */
+        :root{
+            font-size: 20px;
+        }
+
+        body{
+            font-size: 15px;
+            line-height: 1.7;
+            color: #102770;
+            background-color: #ffeba7;
+            overflow-x: hidden;
+        }
+
+        a{
+            color: inherit; 
+            transition: all 200ms linear;
+        }
+        
+        a:hover{
+            text-decoration: none;
+        }
+        
+        .section{
+            width: 100%;
+            position: relative;
+        }
+
+        .full-height{
+            min-height: 100vh;
+        }
+
+        [type="checkbox"]:checked, 
+        [type="checkbox"]:not(:checked){
+            position: absolute;
+            left: -999999px;
+        } 
+
+        .pricing:checked + label, 
+        .pricing:not(:checked) + label{
+            position: relative;
+            display: block;
+            text-align: center;
+            width: 260px;
+            height: 44px;
+            border-radius: 4px;
+            /* padding: 0; */
+            margin: 0 auto;
+            cursor: pointer;
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: bold;
+            font-size: 15px;
+            letter-spacing: 1px;
+            line-height: 44px;
+            padding: 0 25px;
+            padding-left: 18px;
+            overflow: hidden;
+            color: white;
+            text-align: left;
+        }
+
+        .pricing:checked + label::before, 
+        .pricing:not(:checked) + label::before{
+            position: absolute;
+            content: "";
+            background-color: #102770;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: block;
+            z-index: -2;
+        }
+
+        .pricing:checked + label::after, 
+        .pricing:not(:checked) + label::after{
+            content: "";
+            position: absolute;
+            width: 128px;
+            height: 40px;
+            background-color: #ffeba7;
+            display: block;
+            z-index: -1;
+            top: 2px;
+            left: 2px;
+            border-radius: 2px;
+            transition: all 300ms linear;
+        }
+
+        .pricing:checked + label::after{
+            left: 130px;
+        }
+
+        .block-diff{
+            display: block;
+            mix-blend-mode: difference;
+        }
+
+
+
+        .card-3d-wrap{
+            position: relative;
+            width: 340px;
+            max-width: calc(100% - 20px);
+            height: 510px;
+            margin-top: 90px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-3d-wrapper{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transition: all 700ms ease-out 400ms;   
+        }
+        
+        .card-front, .card-back{
+            backface-visibility: hidden;
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            box-shadow: 0 12px 30px 0 rgba(70, 73, 83, 0.7);
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .card-back{
+            transform: rotateY(180deg);
+        }
+
+        .pricing:checked ~ .card-3d-wrap .card-3d-wrapper{
+            transform: rotateY(180deg);
+            transition: all 700ms ease-out 400ms;
+        }
+
+
+        .pricing-wrap{
+            position: relative;
+            padding-top: 160px;
+            width: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            z-index: 1;
+        }
+
+        .pricing-wrap h4{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            color: #102770;
+        }
+
+        .pricing-wrap h4::before{
+            position: absolute;
+            content: "";
+            z-index: -1;
+            background-image: linear-gradient(200deg, #448ad5, #b8eaf8);
+            display: block;
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 6px 20px 0 rgba(16, 39, 60, .3);
+            animation: border_transform 6s linear infinite;
+
+        }
+
+
+        @keyframes border_transform {
+            0%, 100%{border-radius: 80% 37% 54% 54% / 55% 48% 72% 45%;}
+            14%{border-radius: 40% 80% 54% 46% / 49% 60% 40% 51%;}
+            27%{border-radius: 57% 53% 54% 46% / 44% 57% 66% 53%;}
+            42%{border-radius: 47% 53% 41% 59% / 50% 43% 47% 42%;}
+            56%{border-radius: 69% 55% 49% 58% / 40% 43% 67% 49%;}
+            70%{border-radius: 45% 50% 42% 54% / 70% 53% 47% 42%;}
+            83%{border-radius: 88% 59% 45% 59% / 40% 63% 77% 48%;}
+            90%{border-radius: 42% 53% 60% 51% / 30% 63% 37% 42%;}
+        }
+
+        .card-back .pricing-wrap h4::before{
+            background-image: linear-gradient(270deg, #7fad5a, #d9f1c7);
+        }
+
+        .pricing-wrap h2{
+            position: relative;
+            width: 100%;
+            font-size: 36px;
+            line-height: 1.1;
+        }
+
+        .pricing-wrap h2 sup{
+            font-size: 20px;
+        }
+
+        .pricing-wrap p{
+            position: relative;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .card-back .pricing-wrap h2, 
+        .card-back .pricing-wrap h4, 
+        .card-back .pricing-wrap p{
+            color: #0c1c00;
+        }
+
+        .link{
+            position: relative;
+            padding: 10px 20px;
+            display: inline-block;
+            background-color: #102770;
+            color: #ffeba7;
+            font-size: 14px;
+            border-radius: 10px;
+            
+        }
+
+        .link:hover{
+            background-color: #ffeba7;
+            color: #102770;
+        }
+
+        .card-back .pricing-wrap .link{
+            background-color: #0c1c00;
+        }
+        
+        .card-back .pricing-wrap .link:hover{
+            color: #0c1c00;
+            background-color: #ffeba7;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section text-center py-5 py-md-0">
+                        <input type="checkbox" class="pricing" id="pricing" name="pricing">
+                        <label for="pricing">
+                            <span class="block-diff">KAYAKING <span class="float-right">CAMPING</span> </span>
+                        </label>
+
+                        <div class="card-3d-wrap mx-a">
+                            <div class="card-3d-wrapper">
+
+                                <div class="card-front">
+                                    <div class="pricing-wrap">
+                                        <h4 class="mb-5">Kayaking</h4>
+                                        <h2 class="mb-2"><sup>$</sup> 39 / 4 <sup>hrs</sup></h2>
+                                        <p class="mb-4">per person</p>
+                                        <p class="mb-4">Drina, Serbia</p>
+                                        <a href="#" class="link">Choose Date</a>
+                                        <div class="img-wrap img-2">
+                                            <img src="images/sea.png" alt="sea">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-1">
+                                            <img src="images/kayak.png" alt="kayak">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-3">
+                                            <img src="images/water.png" alt="water">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-4">
+                                            <img src="images/Stone.png" alt="Stone">
+                                        </div><!-- img-wrap -->
+                                    </div><!-- pricing-wrap -->
+                                </div><!-- card-front -->
+
+                                <div class="card-back">
+                                    <div class="pricing-wrap">
+                                        <h4 class="mb-5">Camping</h4>
+                                        <h2 class="mb-2"><sup>$</sup> 29 / 8 <sup>hrs</sup></h2>
+                                        <p class="mb-4">per person</p>
+                                        <p class="mb-4">Tara, Serbia</p>
+                                        <a href="#" class="link">Choose Date</a>
+                                        <div class="img-wrap img-6">
+                                            <img src="images/grass.png" alt="grass">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-5">
+                                            <img src="images/camp.png" alt="camp">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-7">
+                                            <img src="images/Ivy.png" alt="Ivy">
+                                        </div><!-- img-wrap -->
+                                        <div class="img-wrap img-8">
+                                            <img src="images/IvyRock.png" alt="IvyRock">
+                                        </div><!-- img-wrap -->
+                                    </div><!-- pricing-wrap -->
+                                </div><!-- card-back -->
+
+                            </div><!-- card-3d-wrapper -->
+                        </div><!-- card-3d-wrap -->
+                    </div><!-- section -->
+                </div><!-- col-12 -->
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- section -->
+</body>
+</html>
